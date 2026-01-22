@@ -10,19 +10,19 @@ import ErrorPage from './pages/ErrorPage';
 
 function App() {
 
-    return (
-        <>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<PostListPage />} />
-                    <Route path="/posts/new" element={<PostCreatePage />} />
-                    <Route path="/posts/:id" element={<PostDetailPage />} />
-                    <Route path="/posts/:id/edit" element={<PostEditPage />} />
-                    <Route path="*" element={<ErrorPage />} />
-                </Routes>
-            </BrowserRouter>
-        </>
-    );
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<PostListPage />} />
+          <Route path="/posts/new" element={<PostCreatePage />} />
+          <Route path="/posts/:id" element={<PostDetailPage />} />
+          <Route path="/posts/:id/edit" element={<PostEditPage />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
 }
 
 export default App
