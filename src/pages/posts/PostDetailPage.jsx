@@ -3,7 +3,7 @@ const PostDetailPage = () => {
     <>
       포스트 상세
     </>
-  )
+  );
 }
 
 export default PostDetailPage;

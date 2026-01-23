@@ -3,7 +3,7 @@ const ErrorPage = () => {
     <>
       애러나면 여기로 ㄱㄱ
     </>
-  )
+  );
 }
 
 export default ErrorPage;

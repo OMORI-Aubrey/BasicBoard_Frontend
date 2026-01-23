@@ -3,7 +3,7 @@ const PostCreatePage = () => {
     <>
       포스트 만듦
     </>
-  )
+  );
 }
 
 export default PostCreatePage;
