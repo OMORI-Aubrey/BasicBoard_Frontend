@@ -111,17 +111,24 @@ const PostListPage = () => {
           className="
           mx-auto
           mt-auto
+          w-[25%]
+          flex
+          justify-between
           "
         >
-          <a href="#" class="prev">&lsaquo;</a>
+          <a href="#">
+            <img src="/src/assets/icons/AngleBracket.svg" alt="꺽쇠" />
+          </a> {/* 왼쪽 꺽쇠 */}
+          
+          <a href="#" className="font-bold text-xs">1</a> {/*현재 페이지일때는 text-bold */}
+          <a href="#" className="font-extralight text-xs">2</a>
+          <a href="#" className="font-extralight text-xs">3</a>
+          <a href="#" className="font-extralight text-xs">4</a>
+          <a href="#" className="font-extralight text-xs">5</a>
 
-          <a href="#">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">5</a>
-
-          <a href="#" class="prev">&rsaquo;</a>
+          <a href="#">
+            <img src="/src/assets/icons/AngleBracket.svg" alt="꺽쇠" className="-scale-x-100" />
+          </a> {/* 오른쪽 꺽쇠 */}
         </nav>
       </main>
     </>
