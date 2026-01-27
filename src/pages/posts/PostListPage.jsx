@@ -61,7 +61,7 @@ const PostListPage = () => {
               w-[5%]
             "
             >
-              돋
+              <img src="/src/assets/icons/search.svg" alt="돋보기 아이콘" className="w-5 h-5" />
             </button>
           </form>
 
