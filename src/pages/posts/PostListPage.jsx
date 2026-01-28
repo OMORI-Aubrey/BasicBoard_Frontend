@@ -114,17 +114,27 @@ const PostListPage = () => {
           w-[25%]
           flex
           justify-between
+
+          text-gray-500
+          text-xs
+          font-extralight
           "
         >
           <a href="#">
             <img src="/src/assets/icons/AngleBracket.svg" alt="꺽쇠" />
           </a> {/* 왼쪽 꺽쇠 */}
           
-          <a href="#" className="font-bold text-xs">1</a> {/*현재 페이지일때는 text-bold */}
-          <a href="#" className="font-extralight text-xs">2</a>
-          <a href="#" className="font-extralight text-xs">3</a>
-          <a href="#" className="font-extralight text-xs">4</a>
-          <a href="#" className="font-extralight text-xs">5</a>
+          <a href="#" className="font-bold text-black">1</a> {/*현재 페이지일때는 text-bold, text-black */}
+          <a href="#" className="">2</a>
+          <a href="#" className="">3</a>
+          <a href="#" className="">4</a>
+          <a href="#" className="">5</a>
+
+          <a href="#" className="">
+            <img src="/src/assets/icons/dotdotdot.svg" alt="점점점" />
+          </a>
+
+          <a href="#" className="">14</a> {/*최대 페이지*/}
 
           <a href="#">
             <img src="/src/assets/icons/AngleBracket.svg" alt="꺽쇠" className="-scale-x-100" />
