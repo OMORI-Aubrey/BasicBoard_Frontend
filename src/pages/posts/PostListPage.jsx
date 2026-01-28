@@ -16,7 +16,7 @@ const PostListPage = () => {
           w-full
           "
         >
-          <h2 className="font-bold text-2xl">나의 B로그</h2>
+          <h2 className="font-bold text-2xl text-[#76441D]">나의 B로그</h2>
         </nav>
 
         {/* 검색어 입력, 글쓰기 */}
@@ -51,7 +51,7 @@ const PostListPage = () => {
               placeholder="검색어를 입력해 주세요."
               className="
               focus:outline-none
-              w-[95%]
+              w-[90%]
               "
             />
 
@@ -72,7 +72,7 @@ const PostListPage = () => {
             px-4
             py-2
             rounded-sm
-            bg-black
+            bg-[#77451E]
             text-white
             text-xs
             min-w-20
@@ -85,7 +85,7 @@ const PostListPage = () => {
         {/* 게시글 목록 레이아웃*/}
         <section className="h-screen">
 
-          <article className="h-[20%] border-b-2 flex items-center border-gray-300">
+          <article className="h-[20%] border-b-2 flex items-center border-gray-300/30">
             <div className="ml-4 flex flex-col">
               <h3 className="font-semibold mb-1">
                 체험단 취소는 어떻게 하나요?
