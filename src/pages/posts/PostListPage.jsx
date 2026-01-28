@@ -16,7 +16,12 @@ const PostListPage = () => {
           w-full
           "
         >
-          <h2 className="font-bold text-2xl text-[#76441D]">나의 B로그</h2>
+          <h2
+            className="font-bold text-2xl text-[#76441D]"
+            style={{ fontFamily: '"Noto Serif KR", serif' }}
+          >
+            나의 B로그
+          </h2>
         </nav>
 
         {/* 검색어 입력, 글쓰기 */}
