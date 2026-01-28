@@ -27,9 +27,9 @@ const PostListPage = () => {
           flex justify-end
           items-center
           relative
-          pt-5
+          pt-4
           border-b-2
-          border-gray-200
+          border-gray-400
           "
         >
           <form
@@ -43,7 +43,7 @@ const PostListPage = () => {
             items-center
             pb-2
             border-b-2
-            border-gray-400
+            border-black
             "
           >
             <input
