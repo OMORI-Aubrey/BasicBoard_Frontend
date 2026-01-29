@@ -16,8 +16,6 @@ const PostDetailPage = () => {
             h-[45%]
             mb-[10%]
             px-2
-
-            border-2
           "
         >
           <header
@@ -30,6 +28,7 @@ const PostDetailPage = () => {
             <h2 className="text-2xl font-semibold">
               블로그 제목
             </h2>
+
             <time
               datetime="2024-07-26T20:16"
               className="text-xs font-normal text-[#AAAAAA] ml-auto"
@@ -55,27 +54,110 @@ const PostDetailPage = () => {
           </section>
 
           <div className="h[27%] flex flex-col">
-            <nav className="border-2 flex flex-row justify-center gap-1.5">
-              <button className="flex items-center gap-0.5 bg-[#C4C5CA] rounded px-2 py-1">
-                <img src="/src/assets/icons/whiteAngleBracket.svg" alt="꺽쇠" className="w-4 h-4" />
-                <span className="text-white text-sm">이전글</span>
+            <nav
+              className="
+              flex
+              flex-row
+              justify-center
+              gap-1.5
+              "
+            >
+              <button
+                className="
+                flex
+                items-center
+                gap-0.5
+                bg-[#C4C5CA]
+                rounded
+                px-2
+                py-1.5
+                "
+              >
+                <img
+                  src="/src/assets/icons/whiteAngleBracket.svg"
+                  alt="꺽쇠"
+                  className="w-4 h-4"
+                />
+
+                <span className="text-white text-sm">
+                  이전글
+                </span>
               </button>
 
-              <button className="flex items-center gap-0.5 bg-[#19191B] rounded px-2 py-1">
-                <span className="text-white text-sm">다음글</span>
-                <img src="/src/assets/icons/whiteAngleBracket.svg" alt="꺽쇠" className="-scale-x-100 w-4 h-4" />
+              <button
+                className="
+                flex
+                items-center
+                gap-0.5
+                bg-[#19191B]
+                rounded
+                px-2
+                py-1.5
+                "
+              >
+                <span className="text-white text-sm">
+                  다음글
+                </span>
+
+                <img
+                  src="/src/assets/icons/whiteAngleBracket.svg"
+                  alt="꺽쇠"
+                  className="-scale-x-100 w-4 h-4"
+                />
               </button>
             </nav>
 
-            <footer className="border-2">
-              <button className="">
-                <img src="/src/assets/icons/brownX.svg" alt="X" />
-                <span>삭제하기</span>
+            <footer
+              className="
+              flex
+              flex-row
+              justify-end
+              gap-5
+              "
+            >
+              <button
+                className="
+                flex
+                items-center
+                rounded
+                px-3.5
+                py-1
+                gap-1
+                border-2
+                border-[#D4D5D8]
+                "
+                >
+                <img
+                  src="/src/assets/icons/brownX.svg"
+                  alt="X"
+                  className="w-3 h-3"
+                />
+
+                <span className="font-semibold">
+                  삭제하기
+                </span>
               </button>
 
-              <button className="">
-                <img src="/src/assets/icons/pencil.svg" alt="연필" />
-                <span>수정하기</span>
+              <button
+                className="
+                flex
+                items-center
+                rounded
+                px-3.5
+                py-1
+                gap-1
+                border-2
+                border-[#D4D5D8]
+                "
+                >
+                <img src="/src/assets/icons/pencil.svg"
+                  alt="연필"
+                  className="w-4 h-4"
+                />
+                
+                <span className="font-semibold">
+                  수정하기
+                </span>
               </button>
             </footer>
           </div>
