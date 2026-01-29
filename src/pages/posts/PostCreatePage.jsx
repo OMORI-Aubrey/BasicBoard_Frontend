@@ -62,8 +62,38 @@ const PostCreatePage = () => {
           </div>
         </form>
 
-        <footer>
-
+        <footer
+          className="
+          w-full
+          h-[10%]
+          mt-auto
+          fixed
+          bottom-0
+          bg-[#5A3E2B]
+          "
+        >
+          <div
+            className="
+            h-full
+            flex
+            items-center
+            justify-end
+            mr-[8%]
+            "
+          >
+            <button
+              className="
+              px-3
+              py-2
+              text-sm
+            text-white
+            bg-[#75441D]
+              rounded
+              "
+            >
+              기록 저장
+            </button>
+          </div>
         </footer>
       </main>
     </>
