@@ -1,4 +1,9 @@
+import { usePosts } from "../../hooks/usePosts";
+
 const PostListPage = () => {
+  const { posts } = usePosts();
+
+
   return (
     <>
       <main
@@ -93,25 +98,24 @@ const PostListPage = () => {
         {/* 게시글 목록 레이아웃*/}
         <section className="h-screen">
 
-          <article className="h-[20%] border-b-2 flex items-center border-gray-300/30">
-            <div className="ml-4 flex flex-col">
-              <h3 className="font-semibold mb-1">
-                체험단 취소는 어떻게 하나요?
-              </h3>
-              <p className="font-light text-xs text-[#5D5F67] mb-5">
-                체험단 하면서 목과 어깨가 너무 안좋아져서
-                이제 살려고 당첨된거 취소할려고 하는데 취소 버튼이 안보이네요
-                취소는 어디서 하면 될까요?
-              </p>
-              <time
-                datetime="2024-07-26"
-                className="text-xs font-light text-[#AAAAAA]"
-              >
-                2024.07.26
-              </time>
-            </div>
-          </article>
-
+          {posts.map(post => (
+            <article key={post.id} className="h-[20%] border-b-2 flex items-center border-gray-300/30">
+              <div className="ml-4 flex flex-col">
+                <h3 className="font-semibold mb-1">
+                  {post.title}
+                </h3>
+                <p className="font-light text-xs text-[#5D5F67] mb-5">
+                  {post.content}
+                </p>
+                <span
+                  className="text-xs font-light text-[#AAAAAA]"
+                >
+                  {new Date(post.createdAt).toLocaleString()}
+                </span>
+              </div>
+            </article>
+          ))}
+          
         </section>
 
         {/* 페이지네이션 */}
