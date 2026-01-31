@@ -15,7 +15,12 @@ export const postService = {
   // 글 상세 조회
   getPostById: (id) =>
     fetch(`${BASE_URL}/posts/${id}`)
-      .then(res => res.json()),
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("글 상세 조회 실패");
+        }
+        return res.json();
+      }),
 
   
   // 글 작성
