@@ -1,4 +1,14 @@
+import { useParams } from "react-router-dom";
+import { usePost } from "../../hooks/usePost";
+
+
 const PostDetailPage = () => {
+  const { id } = useParams();
+  const { post } = usePost(id);
+
+  if (!post) return
+
+
   return (
     <>
       <main
@@ -26,7 +36,7 @@ const PostDetailPage = () => {
             "
           >
             <h2 className="text-2xl font-semibold">
-              블로그 제목
+              {post.title}
             </h2>
 
             <time
@@ -47,9 +57,7 @@ const PostDetailPage = () => {
             "
           >
             <p className="text-sm">
-              체험단 하면서 목과 어깨가 너무 안좋아져서
-              이제 살려고 당첨된거 취소할려고 하는데 취소 버튼이 안보이네요
-              취소는 어디서 하면 될까요?
+              {post.content}
             </p>
           </section>
 
