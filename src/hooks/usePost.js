@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import { postService } from "../api/postService";
+import { mockPosts } from "../mocks/posts.mock";
 
 export const usePost = (id) => {
   const [post, setPost] = useState(null);
 
   useEffect(() => {
-    if (!id) return;
-
-    postService.getPostById(id)
-      .then(data => setPost(data));
+    const found = mockPosts.find(p => p.id === Number(id));
+    setPost(found);
   }, [id]);
 
   return { post };
-};
+}

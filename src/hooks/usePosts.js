@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { postService } from "../api/postService";
+import { mockPosts } from "../mocks/posts.mock";
+
+const LIMIT = 5;
 
 
 export const usePosts = () => {
+  const [page, setPage] = useState(1);
   const [posts, setPosts] = useState([]);
-  const [pageInfo, setPageInfo] = useState({
-    page: 1,
-    totalPages: 1,
-  });
+  const [totalPages, setTotalPages] = useState(1);
 
 
   const fetchPosts = async (page = 1) => {
@@ -22,13 +23,18 @@ export const usePosts = () => {
 
 
   useEffect(() => {
-    fetchPosts(1);
-  }, []);
+    const start = (page - 1) * LIMIT;
+    const end = start + LIMIT;
+
+    setPosts(mockPosts.slice(start, end));
+    setTotalPages(Math.ceil(mockPosts.length / LIMIT));
+  }, [page]);
 
 
   return {
     posts,
-    pageInfo,
-    fetchPosts,
+    page,
+    totalPages,
+    setPage,
   };
 };

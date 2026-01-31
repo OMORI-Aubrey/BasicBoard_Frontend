@@ -1,7 +1,8 @@
 import { usePosts } from "../../hooks/usePosts";
+import { Link } from "react-router-dom";
 
 const PostListPage = () => {
-  const { posts } = usePosts();
+  const { posts, page, totalPages, setPage } = usePosts();
 
 
   return (
@@ -99,23 +100,23 @@ const PostListPage = () => {
         <section className="h-screen">
 
           {posts.map(post => (
-            <Link to={`/posts/${post.id}`}>
-              <article key={post.id} className="h-[20%] border-b-2 flex items-center border-gray-300/30">
-                <div className="ml-4 flex flex-col">
+            <article key={post.id} className="h-[20%] border-b-2 flex items-center border-gray-300/30">
+              <div className="ml-4 flex flex-col">
+                <Link to={`/posts/${post.id}`}>
                   <h3 className="font-semibold mb-1">
                     {post.title}
                   </h3>
-                  <p className="font-light text-xs text-[#5D5F67] mb-5">
-                    {post.content}
-                  </p>
-                  <span
-                    className="text-xs font-light text-[#AAAAAA]"
-                  >
-                    {new Date(post.createdAt).toLocaleString()}
-                  </span>
-                </div>
-              </article>
-            </Link>
+                </Link>
+                <p className="font-light text-xs text-[#5D5F67] mb-5">
+                  {post.content}
+                </p>
+                <span
+                  className="text-xs font-light text-[#AAAAAA]"
+                >
+                  {new Date(post.createdAt).toLocaleString()}
+                </span>
+              </div>
+            </article>
           ))}
 
         </section>
@@ -136,23 +137,35 @@ const PostListPage = () => {
           font-extralight
           "
         >
-          <a href="#">
+          <button
+            onClick={() => setPage(page - 1)}
+            disabled={page === 1}
+          >
             <img src="/src/assets/icons/blackAngleBracket.svg" alt="꺽쇠" />
-          </a> {/* 왼쪽 꺽쇠 */}
+          </button> {/* 왼쪽 꺽쇠 */}
 
-          <a href="#" className="font-bold text-black">1</a> {/*현재 페이지일때는 text-bold, text-black */}
-          <a href="#" className="">2</a>
-          <a href="#" className="">3</a>
-          <a href="#" className="">4</a>
-          <a href="#" className="">5</a>
+          {/*현재 페이지일때는 text-bold, text-black */}
+          {Array.from({ length: totalPages }).map((_, idx) => {
+          const pageNumber = idx + 1;
+          return (
+            <button
+              key={pageNumber}
+              onClick={() => setPage(pageNumber)}
+              style={{
+                fontWeight: page === pageNumber ? "bold" : "normal"
+              }}
+            >
+              {pageNumber}
+            </button>
+          );
+        })}
 
-          <img src="/src/assets/icons/dotdotdot.svg" alt="점점점" />
-
-          <a href="#" className="">14</a> {/*최대 페이지*/}
-
-          <a href="#">
+          <button
+            onClick={() => setPage(page + 1)}
+            disabled={page === totalPages}
+          >
             <img src="/src/assets/icons/blackAngleBracket.svg" alt="꺽쇠" className="-scale-x-100" />
-          </a> {/* 오른쪽 꺽쇠 */}
+          </button> {/* 오른쪽 꺽쇠 */}
         </nav>
       </main>
     </>
