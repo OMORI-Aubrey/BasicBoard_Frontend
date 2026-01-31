@@ -1,10 +1,25 @@
 import { useParams } from "react-router-dom";
 import { usePost } from "../../hooks/usePost";
+import { useNavigate } from "react-router-dom";
+import { postService } from "../../api/postService";
 
 
 const PostDetailPage = () => {
   const { id } = useParams();
   const { post } = usePost(id);
+  const navigate = useNavigate();
+
+  const handleEdit = () => {
+    navigate(`/posts/${id}/edit`);
+  };
+
+  const handleDelete = async () => {
+    const confirm = window.confirm("정말 삭제하시겠습니까?");
+    if (!confirm) return;
+
+    await postService.deletePost(id);
+    navigate("/");
+  };
 
   if (!post) return
 
@@ -141,7 +156,7 @@ const PostDetailPage = () => {
                   className="w-3 h-3"
                 />
 
-                <span className="font-semibold">
+                <span className="font-semibold" onClick={handleDelete}>
                   삭제하기
                 </span>
               </button>
@@ -163,7 +178,7 @@ const PostDetailPage = () => {
                   className="w-4 h-4"
                 />
 
-                <span className="font-semibold">
+                <span className="font-semibold" onClick={handleEdit}>
                   수정하기
                 </span>
               </button>
