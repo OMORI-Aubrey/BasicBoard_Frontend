@@ -5,8 +5,8 @@ import App from './App.jsx'
 import Header from './layouts/Header.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <>
     <Header />
     <App />
-  </StrictMode>,
+  </>,
 )

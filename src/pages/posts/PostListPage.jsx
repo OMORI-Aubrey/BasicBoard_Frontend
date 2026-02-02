@@ -1,9 +1,10 @@
 import { usePosts } from "../../hooks/usePosts";
+import Post from "../../components/list/Post";
 import { Link } from "react-router-dom";
 
 const PostListPage = () => {
   const { posts, page, totalPages, setPage } = usePosts();
-
+  console.log(posts)
 
   return (
     <>
@@ -98,24 +99,9 @@ const PostListPage = () => {
 
         {/* 게시글 목록 레이아웃*/}
         <section className="h-screen">
-
-          {posts.map(post => (
+          {posts.map((post) => (
             <article key={post.id} className="h-[20%] border-b-2 flex items-center border-gray-300/30">
-              <div className="ml-4 flex flex-col">
-                <Link to={`/posts/${post.id}`}>
-                  <h3 className="font-semibold mb-1">
-                    {post.title}
-                  </h3>
-                </Link>
-                <p className="font-light text-xs text-[#5D5F67] mb-5">
-                  {post.content}
-                </p>
-                <span
-                  className="text-xs font-light text-[#AAAAAA]"
-                >
-                  {new Date(post.createdAt).toLocaleString()}
-                </span>
-              </div>
+              <Post post={post} />
             </article>
           ))}
 
@@ -146,19 +132,19 @@ const PostListPage = () => {
 
           {/*현재 페이지일때는 text-bold, text-black */}
           {Array.from({ length: totalPages }).map((_, idx) => {
-          const pageNumber = idx + 1;
-          return (
-            <button
-              key={pageNumber}
-              onClick={() => setPage(pageNumber)}
-              style={{
-                fontWeight: page === pageNumber ? "bold" : "normal"
-              }}
-            >
-              {pageNumber}
-            </button>
-          );
-        })}
+            const pageNumber = idx + 1;
+            return (
+              <button
+                key={pageNumber}
+                onClick={() => setPage(pageNumber)}
+                style={{
+                  fontWeight: page === pageNumber ? "bold" : "normal"
+                }}
+              >
+                {pageNumber}
+              </button>
+            );
+          })}
 
           <button
             onClick={() => setPage(page + 1)}
