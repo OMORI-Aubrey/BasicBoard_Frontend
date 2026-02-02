@@ -1,11 +1,10 @@
 import { usePosts } from "../../hooks/usePosts";
 import Post from "../../components/list/Post";
-import { Link } from "react-router-dom";
 
 const PostListPage = () => {
   const { posts, page, totalPages, setPage } = usePosts();
-  console.log(posts)
 
+  
   return (
     <>
       <main

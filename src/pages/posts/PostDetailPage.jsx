@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { usePost } from "../../hooks/usePost";
 import { useNavigate } from "react-router-dom";
 import { postService } from "../../api/postService";
+import dayjs from "dayjs";
 
 
 const PostDetailPage = () => {
@@ -54,12 +55,11 @@ const PostDetailPage = () => {
               {post.title}
             </h2>
 
-            <time
-              datetime="2024-07-26T20:16"
+            <span
               className="text-xs font-normal text-[#AAAAAA] ml-auto"
             >
-              2024-07-26 20:16
-            </time>
+              {dayjs(post.createdAt).format("YYYY.MM.DD HH:mm")}
+            </span>
           </header>
 
           <section

@@ -17,7 +17,7 @@ export const postService = {
     fetch(`${BASE_URL}/posts/${id}`)
       .then(res => {
         if (!res.ok) {
-          throw new Error("글 상세 조회 실패");
+          throw new Error("게시글 조회 실패");
         }
         return res.json();
       }),
