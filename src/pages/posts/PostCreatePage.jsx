@@ -101,6 +101,7 @@ const PostCreatePage = () => {
             "
           >
             <button
+              type="button"
               className="
               px-3
               py-2

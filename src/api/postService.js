@@ -35,14 +35,21 @@ export const postService = {
 
 
   // 글 수정
-  updatePost: (id, data) =>
-    fetch(`${BASE_URL}/posts/${id}`, {
+  updatePost: async (id, data) => {
+    const res = await fetch(`${BASE_URL}/posts/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    }),
+    });
+
+    if (!res.ok) {
+      throw new Error("게시글 수정 실패");
+    }
+
+    return res.json();
+  },
 
 
   // 글 삭제
