@@ -12,15 +12,13 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<PostListPage />} />
-          <Route path="/posts/new" element={<PostCreatePage />} />
-          <Route path="/posts/:id" element={<PostDetailPage />} />
-          <Route path="/posts/:id/edit" element={<PostEditPage />} />
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<PostListPage />} />
+        <Route path="/posts/new" element={<PostCreatePage />} />
+        <Route path="/posts/:id" element={<PostDetailPage />} />
+        <Route path="/posts/:id/edit" element={<PostEditPage />} />
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
     </>
   );
 }
