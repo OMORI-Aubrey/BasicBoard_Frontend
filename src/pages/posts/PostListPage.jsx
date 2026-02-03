@@ -1,12 +1,29 @@
 import { usePosts } from "../../hooks/usePosts";
 import Post from "../../components/list/Post";
 import { useNavigate } from "react-router-dom";
+import { MAX_VISIBLE_PAGES } from "../../constants/MAX_VISIBLE_PAGES";
 
 const PostListPage = () => {
   const { posts, page, totalPages, setPage } = usePosts();
   const navigate = useNavigate();
 
-  
+
+  const getPageNumbers = () => {
+    if (totalPages <= MAX_VISIBLE_PAGES) {
+      // 페이지가 5개 이하이면 전부 표시
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    // 1 ~ 5
+    const pages = Array.from(
+      { length: MAX_VISIBLE_PAGES },
+      (_, i) => i + 1
+    );
+
+    return pages;
+  };
+
+
   return (
     <>
       <main
@@ -91,6 +108,7 @@ const PostListPage = () => {
             inline-flex
             items-center
             gap-1.5
+            select-none
             "
             onClick={() => navigate("/posts/new")}
           >
@@ -129,31 +147,54 @@ const PostListPage = () => {
             onClick={() => setPage(page - 1)}
             disabled={page === 1}
           >
-            <img src="/src/assets/icons/blackAngleBracket.svg" alt="꺽쇠" />
-          </button> {/* 왼쪽 꺽쇠 */}
+            <img src="/src/assets/icons/blackAngleBracket.svg" alt="이전" />
+          </button>
 
-          {/*현재 페이지일때는 text-bold, text-black */}
-          {Array.from({ length: totalPages }).map((_, idx) => {
-            const pageNumber = idx + 1;
-            return (
-              <button
-                key={pageNumber}
-                onClick={() => setPage(pageNumber)}
-                style={{
-                  fontWeight: page === pageNumber ? "bold" : "normal"
-                }}
-              >
-                {pageNumber}
-              </button>
-            );
-          })}
+          {/* 페이지 번호 */}
+          {getPageNumbers().map((pageNumber) => (
+            <button
+              key={pageNumber}
+              onClick={() => setPage(pageNumber)}
+              style={{
+                fontWeight: page === pageNumber ? "bold" : "normal",
+                color: page === pageNumber ? "#000" : undefined,
+              }}
+            >
+              {pageNumber}
+            </button>
+          ))}
 
+          {/* ... 표시 */}
+          {totalPages > MAX_VISIBLE_PAGES && (
+            <span className="px-1">
+              <img src="/src/assets/icons/dotdotdot.svg" alt="점점점" />
+            </span>
+          )}
+
+          {/* 마지막 페이지 */}
+          {totalPages > MAX_VISIBLE_PAGES && (
+            <button
+              onClick={() => setPage(totalPages)}
+              style={{
+                fontWeight: page === totalPages ? "bold" : "normal",
+                color: page === totalPages ? "#000" : undefined,
+              }}
+            >
+              {totalPages}
+            </button>
+          )}
+
+          {/* 다음 버튼 */}
           <button
             onClick={() => setPage(page + 1)}
             disabled={page === totalPages}
           >
-            <img src="/src/assets/icons/blackAngleBracket.svg" alt="꺽쇠" className="-scale-x-100" />
-          </button> {/* 오른쪽 꺽쇠 */}
+            <img
+              src="/src/assets/icons/blackAngleBracket.svg"
+              alt="다음"
+              className="-scale-x-100"
+            />
+          </button>
         </nav>
       </main>
     </>
