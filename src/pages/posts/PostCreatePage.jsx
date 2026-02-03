@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreatePost } from "../../hooks/useCreatePost";
 
@@ -6,13 +6,58 @@ import { useCreatePost } from "../../hooks/useCreatePost";
 const PostCreatePage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [isDirty, setIsDirty] = useState(false);
+
   const { createPost } = useCreatePost();
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     await createPost({ title, content });
     navigate("/");
-  }
+  };
+
+
+  useEffect(() => {
+    setIsDirty(title.trim() !== "" || content.trim() !== "");
+  }, [title, content]);
+
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (!isDirty) return;
+
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () =>
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
+
+
+  useEffect(() => {
+    if (!isDirty) return;
+
+    const handlePopState = () => {
+      const confirmed = window.confirm(
+        "작성을 그만두시겠습니까? 작성한 내용은 저장되지 않습니다."
+      );
+
+      if (confirmed) {
+        navigate("/");
+      } else {
+        window.history.pushState(null, "", window.location.href);
+      }
+    };
+
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [isDirty, navigate]);
 
   return (
     <>
