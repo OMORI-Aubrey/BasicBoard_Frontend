@@ -3,26 +3,23 @@ import { postService } from "../api/postService";
 
 export const usePost = (id) => {
   const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [prevId, setPrevId] = useState(null);
+  const [nextId, setNextId] = useState(null);
+
 
   useEffect(() => {
     if (!id) return;
 
     const fetchPost = async () => {
-      try {
-        setLoading(true);
-        const data = await postService.getPostById(id);
-        setPost(data);
-      } catch (e) {
-        setError(e);
-      } finally {
-        setLoading(false);
-      }
+      const data = await postService.getPostById(id);
+
+      setPost(data.post);
+      setPrevId(data.prevId);
+      setNextId(data.nextId);
     };
 
     fetchPost();
   }, [id]);
 
-  return { post, loading, error };
+  return { post, prevId, nextId };
 };

@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 
 const PostDetailPage = () => {
   const { id } = useParams();
-  const { post } = usePost(id);
+  const { post, prevId, nextId } = usePost(id);
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -86,6 +86,7 @@ const PostDetailPage = () => {
               "
             >
               <button
+                type="button"
                 className="
                 flex
                 items-center
@@ -94,7 +95,12 @@ const PostDetailPage = () => {
                 rounded
                 px-2
                 py-1.5
+                select-none
                 "
+                style={{
+                  visibility: prevId ? "visible" : "hidden"
+                }}
+                onClick={() => navigate(`/posts/${prevId}`)}
               >
                 <img
                   src="/src/assets/icons/whiteAngleBracket.svg"
@@ -108,6 +114,7 @@ const PostDetailPage = () => {
               </button>
 
               <button
+                type="button"
                 className="
                 flex
                 items-center
@@ -116,7 +123,12 @@ const PostDetailPage = () => {
                 rounded
                 px-2
                 py-1.5
+                select-none
                 "
+                style={{
+                  visibility: nextId ? "visible" : "hidden"
+                }}
+                onClick={() => navigate(`/posts/${nextId}`)}
               >
                 <span className="text-white text-sm">
                   다음글
@@ -148,6 +160,7 @@ const PostDetailPage = () => {
                 gap-1
                 border-2
                 border-[#D4D5D8]
+                select-none
                 "
                 >
                 <img
@@ -171,6 +184,7 @@ const PostDetailPage = () => {
                 gap-1
                 border-2
                 border-[#D4D5D8]
+                select-none
                 "
                 >
                 <img src="/src/assets/icons/pencil.svg"
