@@ -1,8 +1,10 @@
 import { usePosts } from "../../hooks/usePosts";
 import Post from "../../components/list/Post";
+import { useNavigate } from "react-router-dom";
 
 const PostListPage = () => {
   const { posts, page, totalPages, setPage } = usePosts();
+  const navigate = useNavigate();
 
   
   return (
@@ -77,8 +79,8 @@ const PostListPage = () => {
             </button>
           </form>
 
-          <a
-            href="#"
+          <button
+            type="button"
             className="
             mr-3
             px-4
@@ -90,10 +92,11 @@ const PostListPage = () => {
             items-center
             gap-1.5
             "
+            onClick={() => navigate("/posts/new")}
           >
             <img src="/src/assets/icons/pencil.svg" alt="연필 아이콘" className="w-4 h-4 ml-1" />
             <span className="text-white text-xs">기록하기</span>
-          </a>
+          </button>
         </section>
 
         {/* 게시글 목록 레이아웃*/}
