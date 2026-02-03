@@ -53,22 +53,18 @@ const PostEditPage = () => {
 
 
   useEffect(() => {
-    if (!isDirty) return;
-
     const handlePopState = () => {
+      if (!isDirty) return;
+
       const confirmed = window.confirm(
         "기록을 그만 두시겠습니까? 변경사항이 저장되지 않습니다."
       );
 
-      if (confirmed) {
-        navigate(`/posts/${id}`);
-      } else {
-        window.history.pushState(null, "", window.location.href);
+      if (!confirmed) {
+        navigate(0);
       }
     };
 
-    // 현재 페이지를 히스토리에 한 번 더 쌓아둠
-    window.history.pushState(null, "", window.location.href);
     window.addEventListener("popstate", handlePopState);
 
     return () => {
