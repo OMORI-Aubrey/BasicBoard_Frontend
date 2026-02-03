@@ -1,27 +1,14 @@
 import { usePosts } from "../../hooks/usePosts";
 import Post from "../../components/list/Post";
 import { useNavigate } from "react-router-dom";
-import { MAX_VISIBLE_PAGES } from "../../constants/MAX_VISIBLE_PAGES";
+import { getPaginationRange } from "../../utils/pagintation";
+
+
 
 const PostListPage = () => {
   const { posts, page, totalPages, setPage } = usePosts();
+  const { start, end } = getPaginationRange(page, totalPages);
   const navigate = useNavigate();
-
-
-  const getPageNumbers = () => {
-    if (totalPages <= MAX_VISIBLE_PAGES) {
-      // 페이지가 5개 이하이면 전부 표시
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-
-    // 1 ~ 5
-    const pages = Array.from(
-      { length: MAX_VISIBLE_PAGES },
-      (_, i) => i + 1
-    );
-
-    return pages;
-  };
 
 
   return (
@@ -137,61 +124,67 @@ const PostListPage = () => {
           w-[25%]
           flex
           justify-between
-
           text-gray-500
           text-xs
           font-extralight
           "
         >
+          {/* 이전 */}
           <button
             onClick={() => setPage(page - 1)}
             disabled={page === 1}
-          >
-            <img src="/src/assets/icons/blackAngleBracket.svg" alt="이전" />
-          </button>
-
-          {/* 페이지 번호 */}
-          {getPageNumbers().map((pageNumber) => (
-            <button
-              key={pageNumber}
-              onClick={() => setPage(pageNumber)}
-              style={{
-                fontWeight: page === pageNumber ? "bold" : "normal",
-                color: page === pageNumber ? "#000" : undefined,
-              }}
-            >
-              {pageNumber}
-            </button>
-          ))}
-
-          {/* ... 표시 */}
-          {totalPages > MAX_VISIBLE_PAGES && (
-            <span className="px-1">
-              <img src="/src/assets/icons/dotdotdot.svg" alt="점점점" />
-            </span>
-          )}
-
-          {/* 마지막 페이지 */}
-          {totalPages > MAX_VISIBLE_PAGES && (
-            <button
-              onClick={() => setPage(totalPages)}
-              style={{
-                fontWeight: page === totalPages ? "bold" : "normal",
-                color: page === totalPages ? "#000" : undefined,
-              }}
-            >
-              {totalPages}
-            </button>
-          )}
-
-          {/* 다음 버튼 */}
-          <button
-            onClick={() => setPage(page + 1)}
-            disabled={page === totalPages}
+            className="disabled:opacity-30"
           >
             <img
               src="/src/assets/icons/blackAngleBracket.svg"
-              alt="다음"
+              alt="왼쪽 꺽쇠"
+            />
+          </button>
+
+          {/* 처음 페이지 + ... */}
+          {start > 1 && (
+            <>
+              <button onClick={() => setPage(1)}>1</button>
+              {start > 2 && <span><img src="/src/assets/icons/dotdotdot.svg" alt="..." /></span>}
+            </>
+          )}
+
+          {/* 페이지 번호 */}
+          {Array.from({ length: end - start + 1 }, (_, i) => {
+            const pageNumber = start + i;
+            return (
+              <button
+                key={pageNumber}
+                onClick={() => setPage(pageNumber)}
+                className={` ${page === pageNumber
+                    ? "font-bold text-black"
+                    : "hover:text-black"
+                  }`}
+              >
+                {pageNumber}
+              </button>
+            );
+          })}
+
+          {/* ... + 마지막 페이지 */}
+          {end < totalPages && (
+            <>
+              {end < totalPages - 1 && <span><img src="/src/assets/icons/dotdotdot.svg" alt="..." /></span>}
+              <button onClick={() => setPage(totalPages)}>
+                {totalPages}
+              </button>
+            </>
+          )}
+
+          {/* 다음 */}
+          <button
+            onClick={() => setPage(page + 1)}
+            disabled={page === totalPages}
+            className="disabled:opacity-30"
+          >
+            <img
+              src="/src/assets/icons/blackAngleBracket.svg"
+              alt="오른쪽 꺽쇠"
               className="-scale-x-100"
             />
           </button>
