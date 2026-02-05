@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { usePosts } from "../../hooks/usePosts";
 import Post from "../../components/list/Post";
 import { useNavigate } from "react-router-dom";
 import { getPaginationRange } from "../../utils/pagintation";
+import RecentSearches from "../../components/list/RecentSearches";
+import { useRecentSearches } from "../../hooks/useRecentSearches";
 
 
 
@@ -9,7 +12,15 @@ const PostListPage = () => {
   const { posts, page, totalPages, setPage } = usePosts();
   const { start, end } = getPaginationRange(page, totalPages);
   const navigate = useNavigate();
+  const [keyword, setKeyword] = useState("");
+  const { recent, addSearch, removeSearch } = useRecentSearches();
+  const [focused, setFocused] = useState(false);
 
+  const handleSearch = () => {
+    addSearch(keyword);
+    // 👉 여기서 실제 검색 API 호출
+    // fetchPosts({ keyword });
+  };
 
   return (
     <>
@@ -23,7 +34,6 @@ const PostListPage = () => {
         mx-auto
         "
       >
-        {/* 게시판 이름 */}
         <nav
           className="
           w-full
@@ -37,7 +47,6 @@ const PostListPage = () => {
           </h2>
         </nav>
 
-        {/* 검색어 입력, 글쓰기 */}
         <section
           className="
           w-full
@@ -71,13 +80,18 @@ const PostListPage = () => {
               focus:outline-none
               w-[90%]
               "
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
             />
 
             <button
               className="
               ml-auto
               w-[5%]
-            "
+              "
+              onClick={handleSearch}
             >
               <img src="/src/assets/icons/search.svg" alt="돋보기 아이콘" className="w-5 h-5" />
             </button>
@@ -104,17 +118,22 @@ const PostListPage = () => {
           </button>
         </section>
 
-        {/* 게시글 목록 레이아웃*/}
         <section className="h-screen">
-          {posts.map((post) => (
-            <article key={post.id} className="h-[20%] border-b-2 flex items-center border-gray-300/30">
-              <Post post={post} />
-            </article>
-          ))}
+          {focused && <RecentSearches
+            searches={recent}
+            onClick={(k) => {
+              setKeyword(k);
+              addSearch(k);
+              // fetchPosts({ keyword: k });
+            }}
+            onRemove={removeSearch}
+          />}
 
+          {posts.map((post) => (
+            <Post key={post.id} post={post} />
+          ))}
         </section>
 
-        {/* 페이지네이션 */}
         <nav
           className="
           mx-auto
@@ -157,8 +176,8 @@ const PostListPage = () => {
                 key={pageNumber}
                 onClick={() => setPage(pageNumber)}
                 className={` ${page === pageNumber
-                    ? "font-bold text-black"
-                    : "hover:text-black"
+                  ? "font-bold text-black"
+                  : "hover:text-black"
                   }`}
               >
                 {pageNumber}

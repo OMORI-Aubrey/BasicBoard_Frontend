@@ -55,11 +55,11 @@ const PostDetailPage = () => {
               {post.title}
             </h2>
 
-            <span
+            <time
               className="text-xs font-normal text-[#AAAAAA] ml-auto"
             >
               {dayjs(post.createdAt).format("YYYY.MM.DD HH:mm")}
-            </span>
+            </time>
           </header>
 
           <section

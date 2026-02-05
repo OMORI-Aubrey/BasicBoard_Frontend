@@ -8,23 +8,25 @@ const Post = ({ post }) => {
 
   return (
     <>
-      <button
-        type="button"
-        className="ml-4 flex flex-col w-full text-left"
-        onClick={() => navigate(`/posts/${post.id}`)}
-      >
-        <h3 className="font-semibold mb-1">
-          {post.title}
-        </h3>
-        <p className="font-light text-xs text-[#5D5F67] mb-5 truncate">
-          {post.content}
-        </p>
-        <span
-          className="text-xs font-light text-[#AAAAAA]"
+      <article key={post.id} className="h-[20%] border-b-2 flex items-center border-gray-300/30">
+        <button
+          type="button"
+          className="ml-4 flex flex-col w-full text-left"
+          onClick={() => navigate(`/posts/${post.id}`)}
         >
-          {dayjs(post.createdAt).format("YYYY.MM.DD HH:mm")}
-        </span>
-      </button>
+          <h3 className="font-semibold mb-1">
+            {post.title}
+          </h3>
+          <p className="font-light text-xs text-[#5D5F67] mb-5 truncate">
+            {post.content}
+          </p>
+          <time
+            className="text-xs font-light text-[#AAAAAA]"
+          >
+            {dayjs(post.createdAt).format("YYYY.MM.DD HH:mm")}
+          </time>
+        </button>
+      </article>
     </>
   );
 }
