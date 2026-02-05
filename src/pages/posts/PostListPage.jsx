@@ -1,26 +1,41 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { usePosts } from "../../hooks/usePosts";
 import Post from "../../components/list/Post";
 import { useNavigate } from "react-router-dom";
 import { getPaginationRange } from "../../utils/pagintation";
 import RecentSearches from "../../components/list/RecentSearches";
 import { useRecentSearches } from "../../hooks/useRecentSearches";
-
+import { normalize } from "../../utils/normalize";
 
 
 const PostListPage = () => {
   const { posts, page, totalPages, setPage } = usePosts();
   const { start, end } = getPaginationRange(page, totalPages);
   const navigate = useNavigate();
-  const [keyword, setKeyword] = useState("");
-  const { recent, addSearch, removeSearch } = useRecentSearches();
   const [focused, setFocused] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const { recent, addSearch, removeSearch, clearAll } = useRecentSearches();
 
   const handleSearch = () => {
-    addSearch(keyword);
-    // 👉 여기서 실제 검색 API 호출
-    // fetchPosts({ keyword });
+    const normalized = normalize(keyword);
+    if (!normalized) return;
+
+    setSearchTerm(normalized);
+    addSearch(normalized);
   };
+
+  const filteredPosts = useMemo(() => {
+    if (!searchTerm) return posts;
+
+    return posts.filter((post) => {
+      return (
+        normalize(post.title).includes(searchTerm) ||
+        normalize(post.content).includes(searchTerm)
+      );
+    });
+  }, [posts, searchTerm]);
+
 
   return (
     <>
@@ -123,14 +138,18 @@ const PostListPage = () => {
             searches={recent}
             onClick={(k) => {
               setKeyword(k);
-              addSearch(k);
-              // fetchPosts({ keyword: k });
+              setSearchTerm(k);
             }}
             onRemove={removeSearch}
+            onClear={clearAll}
           />}
 
-          {posts.map((post) => (
-            <Post key={post.id} post={post} />
+          {filteredPosts.map((post) => (
+            <Post
+              key={post.id}
+              post={post}
+              searchTerm={searchTerm}
+            />
           ))}
         </section>
 

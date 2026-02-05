@@ -1,43 +1,39 @@
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
-const STORAGE_KEY = "recent_searches";
-const MAX_COUNT = 5;
+const KEY = "recent_searches";
+const MAX = 10;
 
 export const useRecentSearches = () => {
   const [recent, setRecent] = useState([]);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const saved = JSON.parse(localStorage.getItem(KEY)) || [];
     setRecent(saved);
   }, []);
 
   const addSearch = (keyword) => {
-    if (!keyword.trim()) return;
+    const date = dayjs().format("MM.DD");
 
     const updated = [
-      keyword,
-      ...recent.filter((k) => k !== keyword),
-    ].slice(0, MAX_COUNT);
+      { keyword, date },
+      ...recent.filter((r) => r.keyword !== keyword),
+    ].slice(0, MAX);
 
     setRecent(updated);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    localStorage.setItem(KEY, JSON.stringify(updated));
   };
 
   const removeSearch = (keyword) => {
-    const updated = recent.filter((k) => k !== keyword);
+    const updated = recent.filter((r) => r.keyword !== keyword);
     setRecent(updated);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    localStorage.setItem(KEY, JSON.stringify(updated));
   };
 
   const clearAll = () => {
     setRecent([]);
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(KEY);
   };
 
-  return {
-    recent,
-    addSearch,
-    removeSearch,
-    clearAll,
-  };
+  return { recent, addSearch, removeSearch, clearAll };
 };

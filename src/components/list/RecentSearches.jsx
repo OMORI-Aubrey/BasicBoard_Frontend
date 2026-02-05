@@ -18,7 +18,8 @@ const RecentSearches = ({ searches, onClick, onRemove }) => {
       >
         <div
           className="
-          pl-3 py-1
+          pl-3
+          py-1
           mt-1
           mb-4
           "
@@ -42,22 +43,24 @@ const RecentSearches = ({ searches, onClick, onRemove }) => {
             gap-1
             border-b-2
             border-gray-300/30
+            pb-2
             "
           >
-            {searches.map((keyword) => (
+            {searches.map(({ keyword, date }) => (
               <li
                 key={keyword}
-                className="flex items-center border-2"
+                className="flex items-center pl-1"
               >
                 <button
-                  className="border-2"
+                  className=""
                   onClick={() => onClick(keyword)}
                 >
                   {keyword}
                 </button>
-
-                <time>
-                  
+                
+                <div className="flex ml-auto gap-2">
+                <time className="text-gray-400 font-light text-sm">
+                  {date}
                 </time>
 
                 <button
@@ -65,14 +68,22 @@ const RecentSearches = ({ searches, onClick, onRemove }) => {
                   onClick={() => onRemove(keyword)}
                 >
                   <img src="/src/assets/icons/grayX.svg" alt="회색 X" />
-                </button>
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
         </div>
 
         <div className="flex">
-          <button className="pl-3 py-2">
+          <button
+            className="pl-3 pb-2"
+            onClick={() => {
+              if (window.confirm("검색기록을 전체 삭제하시겠습니까?")) {
+                onClear();
+              }
+            }}
+          >
             <p className="text-xs font-light text-[#AAAAAA]">
               전체삭제
             </p>
