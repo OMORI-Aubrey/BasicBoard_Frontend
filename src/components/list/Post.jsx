@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import { highlight } from "../../utils/hightlight";
+import highlightText from "../../utils/highlight";
 
 
 const Post = ({ post, searchTerm }) => {
@@ -19,10 +19,10 @@ const Post = ({ post, searchTerm }) => {
           onClick={() => navigate(`/posts/${post.id}`)}
         >
           <h3 className="font-semibold mb-1">
-            {highlight(post.title, searchTerm)}
+            {highlightText(post.title, searchTerm)}
           </h3>
           <p className="font-light text-xs text-[#5D5F67] mb-5 truncate">
-            {highlight(post.content, searchTerm)}
+            {highlightText(post.content, searchTerm)}
           </p>
           <time
             className="text-xs font-light text-[#AAAAAA]"

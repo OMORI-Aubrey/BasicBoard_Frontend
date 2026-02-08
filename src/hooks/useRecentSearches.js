@@ -1,39 +1,38 @@
-import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-
-const KEY = "recent_searches";
-const MAX = 10;
+// hooks/useRecentSearches.js
+import { useState, useEffect } from "react";
 
 export const useRecentSearches = () => {
-  const [recent, setRecent] = useState([]);
-
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem(KEY)) || [];
-    setRecent(saved);
-  }, []);
+  const [recent, setRecent] = useState(() => {
+    const saved = localStorage.getItem("recentKeywords");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const addSearch = (keyword) => {
-    const date = dayjs().format("MM.DD");
-
-    const updated = [
-      { keyword, date },
-      ...recent.filter((r) => r.keyword !== keyword),
-    ].slice(0, MAX);
-
-    setRecent(updated);
-    localStorage.setItem(KEY, JSON.stringify(updated));
+    setRecent(prev => {
+      const filtered = prev.filter(item => item.keyword !== keyword);
+      const newItem = {
+        id: Date.now(),
+        keyword,
+        date: new Date().toLocaleDateString("ko-KR", {
+          month: "2-digit",
+          day: "2-digit",
+        }),
+      };
+      return [newItem, ...filtered].slice(0, 10);
+    });
   };
 
-  const removeSearch = (keyword) => {
-    const updated = recent.filter((r) => r.keyword !== keyword);
-    setRecent(updated);
-    localStorage.setItem(KEY, JSON.stringify(updated));
+  const removeSearch = (id) => {
+    setRecent(prev => prev.filter(item => item.id !== id));
   };
 
   const clearAll = () => {
     setRecent([]);
-    localStorage.removeItem(KEY);
   };
+
+  useEffect(() => {
+    localStorage.setItem("recentKeywords", JSON.stringify(recent));
+  }, [recent]);
 
   return { recent, addSearch, removeSearch, clearAll };
 };

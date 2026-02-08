@@ -1,41 +1,68 @@
-import { useState, useMemo } from "react";
-import { usePosts } from "../../hooks/usePosts";
-import Post from "../../components/list/Post";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPaginationRange } from "../../utils/pagintation";
-import RecentSearches from "../../components/list/RecentSearches";
+import RecentSearches from "../../components/search/RecentSearches";
 import { useRecentSearches } from "../../hooks/useRecentSearches";
-import { normalize } from "../../utils/normalize";
+import SearchBar from "../../components/search/SearchBar";
+import { usePosts } from "../../hooks/usePosts";
+import Post from "../../components/list/Post";
 
 
 const PostListPage = () => {
-  const { posts, page, totalPages, setPage } = usePosts();
-  const { start, end } = getPaginationRange(page, totalPages);
   const navigate = useNavigate();
-  const [focused, setFocused] = useState(false);
-  const [keyword, setKeyword] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
   const { recent, addSearch, removeSearch, clearAll } = useRecentSearches();
+  const [inputValue, setInputValue] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
-  const handleSearch = () => {
-    const normalized = normalize(keyword);
-    if (!normalized) return;
+  const {
+    posts,
+    currentPage,
+    setCurrentPage,
+    total,
+    totalPages,
+    isLoading,
+    isError,
+    error,
+  } = usePosts(1, searchKeyword); // Pass initial page and searchKeyword to usePosts
 
-    setSearchTerm(normalized);
-    addSearch(normalized);
+  const handleSearch = (value) => {
+    const keyword = value ?? inputValue;
+    const trimmed = keyword.replace(/\s/g, "");
+
+    if (!trimmed) {
+      setSearchKeyword("");
+      setCurrentPage(1); // Use setCurrentPage from hook
+      return;
+    }
+
+    setSearchKeyword(trimmed);
+    setCurrentPage(1); // Use setCurrentPage from hook
+    addSearch(keyword);
   };
 
-  const filteredPosts = useMemo(() => {
-    if (!searchTerm) return posts;
+  const { start, end } = getPaginationRange(currentPage, totalPages);
 
-    return posts.filter((post) => {
-      return (
-        normalize(post.title).includes(searchTerm) ||
-        normalize(post.content).includes(searchTerm)
-      );
-    });
-  }, [posts, searchTerm]);
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) { // Check totalPages > 0 to avoid setting page to 0
+      setCurrentPage(totalPages); // Use setCurrentPage from hook
+    }
+  }, [currentPage, totalPages, setCurrentPage]); // Add setCurrentPage to dependency array
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>로딩 중...</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>오류 발생: {error?.message || "알 수 없는 오류"}</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -74,43 +101,11 @@ const PostListPage = () => {
           border-gray-400
           "
         >
-          <form
-            className="
-            grow
-            text-center
-            w-full
-            max-w-md
-            mx-auto
-            flex
-            items-center
-            pb-2
-            border-b-2
-            border-black
-            "
-          >
-            <input
-              type="text"
-              placeholder="검색어를 입력해 주세요."
-              className="
-              focus:outline-none
-              w-[90%]
-              "
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
-            />
-
-            <button
-              className="
-              ml-auto
-              w-[5%]
-              "
-              onClick={handleSearch}
-            >
-              <img src="/src/assets/icons/search.svg" alt="돋보기 아이콘" className="w-5 h-5" />
-            </button>
-          </form>
+          <SearchBar
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            onSearch={handleSearch}
+          />
 
           <button
             type="button"
@@ -134,23 +129,28 @@ const PostListPage = () => {
         </section>
 
         <section className="h-screen">
-          {focused && <RecentSearches
+          <RecentSearches
             searches={recent}
-            onClick={(k) => {
-              setKeyword(k);
-              setSearchTerm(k);
+            onSelect={(keyword) => {
+              setInputValue(keyword);
+              setSearchKeyword(keyword.replace(/\s/g, ""));
+              setCurrentPage(1); // Use setCurrentPage from hook
             }}
             onRemove={removeSearch}
             onClear={clearAll}
-          />}
+          />
 
-          {filteredPosts.map((post) => (
-            <Post
-              key={post.id}
-              post={post}
-              searchTerm={searchTerm}
-            />
-          ))}
+          {posts.length === 0 && !isLoading && !isError ? (
+            <p className="text-center mt-10 text-gray-500">게시글이 없습니다.</p>
+          ) : (
+            posts.map((post) => (
+              <Post
+                key={post.id}
+                post={post}
+                searchTerm={searchKeyword}
+              />
+            ))
+          )}
         </section>
 
         <nav
@@ -169,8 +169,8 @@ const PostListPage = () => {
         >
           {/* 이전 */}
           <button
-            onClick={() => setPage(page - 1)}
-            disabled={page === 1}
+            onClick={() => setCurrentPage(currentPage - 1)} // Use setCurrentPage
+            disabled={currentPage === 1} // Use currentPage
             className="disabled:opacity-30"
           >
             <img
@@ -182,7 +182,7 @@ const PostListPage = () => {
           {/* 처음 페이지 + ... */}
           {start > 1 && (
             <>
-              <button onClick={() => setPage(1)}>1</button>
+              <button onClick={() => setCurrentPage(1)}>1</button> {/* Use setCurrentPage */}
               {start > 2 && <span><img src="/src/assets/icons/dotdotdot.svg" alt="..." /></span>}
             </>
           )}
@@ -193,8 +193,8 @@ const PostListPage = () => {
             return (
               <button
                 key={pageNumber}
-                onClick={() => setPage(pageNumber)}
-                className={` ${page === pageNumber
+                onClick={() => setCurrentPage(pageNumber)} // Use setCurrentPage
+                className={` ${currentPage === pageNumber // Use currentPage
                   ? "font-bold text-black"
                   : "hover:text-black"
                   }`}
@@ -208,7 +208,7 @@ const PostListPage = () => {
           {end < totalPages && (
             <>
               {end < totalPages - 1 && <span><img src="/src/assets/icons/dotdotdot.svg" alt="..." /></span>}
-              <button onClick={() => setPage(totalPages)}>
+              <button onClick={() => setCurrentPage(totalPages)}> {/* Use setCurrentPage */}
                 {totalPages}
               </button>
             </>
@@ -216,8 +216,8 @@ const PostListPage = () => {
 
           {/* 다음 */}
           <button
-            onClick={() => setPage(page + 1)}
-            disabled={page === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)} // Use setCurrentPage
+            disabled={currentPage === totalPages} // Use currentPage
             className="disabled:opacity-30"
           >
             <img

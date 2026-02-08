@@ -1,5 +1,11 @@
-const RecentSearches = ({ searches, onClick, onRemove }) => {
+const RecentSearches = ({
+  searches,
+  onSelect,
+  onRemove,
+  onClear,
+}) => {
   if (searches.length === 0) return null;
+
 
   return (
     <>
@@ -46,28 +52,28 @@ const RecentSearches = ({ searches, onClick, onRemove }) => {
             pb-2
             "
           >
-            {searches.map(({ keyword, date }) => (
+            {searches.map((item) => (
               <li
-                key={keyword}
+                key={item.id}
                 className="flex items-center pl-1"
+                onClick={() => onSelect(item.keyword)}
               >
-                <button
-                  className=""
-                  onClick={() => onClick(keyword)}
-                >
-                  {keyword}
+                <button>
+                  {item.keyword}
                 </button>
-                
-                <div className="flex ml-auto gap-2">
-                <time className="text-gray-400 font-light text-sm">
-                  {date}
-                </time>
 
-                <button
-                  className="text-gray-400"
-                  onClick={() => onRemove(keyword)}
-                >
-                  <img src="/src/assets/icons/grayX.svg" alt="회색 X" />
+                <div className="flex ml-auto gap-2">
+                  <time className="text-gray-400 font-light text-sm">
+                    {item.date}
+                  </time>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemove(item.id);
+                    }}
+                  >
+                    <img src="/src/assets/icons/grayX.svg" alt="회색 X" />
                   </button>
                 </div>
               </li>
@@ -78,11 +84,7 @@ const RecentSearches = ({ searches, onClick, onRemove }) => {
         <div className="flex">
           <button
             className="pl-3 pb-2"
-            onClick={() => {
-              if (window.confirm("검색기록을 전체 삭제하시겠습니까?")) {
-                onClear();
-              }
-            }}
+            onClick={onClear}
           >
             <p className="text-xs font-light text-[#AAAAAA]">
               전체삭제
